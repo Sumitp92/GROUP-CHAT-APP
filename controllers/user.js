@@ -3,11 +3,11 @@ const User = require('../model/userdetail');
 const bcrypt = require('bcrypt');
 const sequelize = require('../util/databases');
 
+// Function to Add User
 const AddUser = async (req, res) => {
     try {
         const { name, email, phone, password } = req.body;
 
-        // Validate required fields
         if (!name || !email || !phone || !password) {
             return res.status(400).json({ success: false, message: 'All fields are required' });
         }
@@ -24,12 +24,38 @@ const AddUser = async (req, res) => {
             phone,
             password: hashedPassword,
         });
-
         res.status(201).json({ success: true, message: 'User signed up successfully' });
+        
     } catch (error) {
         console.error('Error during signup:', error);
         res.status(500).json({ success: false, message: 'Error occurred during signup' });
     }
 };
 
-module.exports = AddUser;
+// Function to Login User
+const LoginUser = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: 'Email and password are required' });
+        }
+
+        const user = await User.findOne({ where: { email } });
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, user.password);
+        if (!isPasswordValid) {
+            return res.status(401).json({ success: false, message: 'Incorrect password' });
+        }
+
+        res.status(200).json({ success: true, message: 'Login successful' });
+    } catch (err) {
+        console.error('Error during login:', err);
+        res.status(500).json({ success: false, message: 'Error occurred during login' });
+    }
+};
+
+module.exports = { AddUser, LoginUser };
