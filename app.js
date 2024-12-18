@@ -12,21 +12,20 @@ app.use(express.urlencoded({ extended: true }));
 
 
 const GeneralRoutes = require('./routes/user') ; 
-
+const MessageRoutes = require('./routes/message')
 app.use('/api' , GeneralRoutes) ; 
+app.use('/api' , MessageRoutes) ; 
 
 const User = require('./model/userdetail') ; 
+const Message = require('./model/messages') ; 
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'signup.html'));
 });
 
-app.get('/' , (req , res) =>{
-    res.sendFile(path.join (__dirname, 'public', 'login.html')) ; 
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'login.html'));
 });
-// app.get('/login', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'public', 'login.html'));
-// });
 
 sequelize.sync({ force: false })
     .then(() => {
