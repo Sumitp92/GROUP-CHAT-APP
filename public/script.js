@@ -90,9 +90,13 @@ async function fetchMessages() {
         });
     } catch (error) {
         console.error('Error fetching messages:', error);
-        alert('Failed to fetch messages');
+        // alert('Failed to fetch messages');
     }
+   
 }
+ setInterval(fetchMessages, 1000);
+// setTimeinterval(() => fetchMessages() , 1000) ; 
+
 // Fetch Messages on Page Load
 document.addEventListener('DOMContentLoaded', fetchMessages);
 
