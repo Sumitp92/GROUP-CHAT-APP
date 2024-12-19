@@ -3,6 +3,7 @@ const User = require('../model/userdetail');
 const bcrypt = require('bcrypt');
 const sequelize = require('../util/databases');
 const jwt = require('jsonwebtoken') ; 
+const JWT_TOKEN = process.env.JWT_TOKEN;
 require('dotenv').config();
 // Function to Add User
 const AddUser = async (req, res) => {
@@ -51,19 +52,24 @@ const LoginUser = async (req, res) => {
         if (!isPasswordValid) {
             return res.status(401).json({ success: false, message: 'User Not Authorized' });
         }
-        const token = jwt.sign(
-            {userId : user.id },
-             process.env.JWT_TOKEN,
-             { expiresIn: '1h' }
-            )
 
-        res.status(200).json({ success: true, message: 'Login successful' , token, user :{
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            phone : user.phone 
-        },
-    });
+        const token = jwt.sign(
+            { userId: user.id },
+            process.env.JWT_TOKEN, // Ensure you are using the correct environment variable
+            { expiresIn: '1h' }
+        );
+
+        res.status(200).json({
+            success: true,
+            message: 'Login successful',
+            token,
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone
+            }
+        });
 
     } catch (err) {
         console.error('Error during login:', err);
