@@ -198,6 +198,14 @@ async function fetchMessages(groupName = null) {
     // setInterval(() => fetchMessages(groupName), 1000);  
 }
 
+const socket = io('http://localhost:3000');
+// it will istens for new messages
+socket.on('newMessage', (data) => {
+    const messagesContainer = document.getElementById('messages');
+    const messageElement = document.createElement('div');
+    messageElement.innerHTML = `<strong>${data.name}:</strong> ${data.message}`;
+    messagesContainer.appendChild(messageElement);
+});
 document.getElementById('sendMessage').addEventListener('click', async () => {
     const message = document.getElementById('message').value;
     const groupName = localStorage.getItem('currentGroup');
@@ -209,13 +217,14 @@ document.getElementById('sendMessage').addEventListener('click', async () => {
         return;
     }
 
-    try {
+ try {
         console.log('Sending message:', message);
         const response = await axios.post(`http://localhost:3000/api/messages/${groupName}`, { message, name: username }, {
             headers: { 'Authorization': `Bearer ${token}` },
         });
 
         console.log('Message sent:', response.data);
+        socket.emit('sendMessage', { name: username, message: response.data.data.message });
 
         const messageElement = document.createElement('div');
         messageElement.innerHTML = `<strong>${username}:</strong> ${response.data.data.message}`;
