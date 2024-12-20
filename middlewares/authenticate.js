@@ -5,7 +5,7 @@ const JWT_TOKEN = process.env.JWT_TOKEN;
 const authenticate = async (req, res, next) => {
     const authorizationHeader = req.headers['authorization'];
     
-        const token = authorizationHeader.split(' ')[1]; // Extract token after 'Bearer'
+        const token = authorizationHeader.split(' ')[1]; 
     
         if (!token) {
             return res.status(403).json({ success: false, message: 'No token found' });

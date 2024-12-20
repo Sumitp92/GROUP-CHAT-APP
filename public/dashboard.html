@@ -6,21 +6,44 @@
     <title>CHAT APP</title>
 </head>
 <body>
+
+    <h2 id="currentGroupDisplay">No Group Selected</h2><br><br>
+
     <div id="user-info">
-        
         <p id="userName"></p>
     </div>
     
     <div id="messages">
-
+        <!-- here all message will show -->
     </div>
     
+
+    <label for="group">Enter Your Group Name:</label>
+    <input type="text" id="group" placeholder="Enter your group name" required>
+    <button id="createGroup" onclick="createGroup()">Create Group</button><br><br>
+
+
     <label for="message">Message:</label>
     <textarea id="message" placeholder="Enter your message" required></textarea>
+    <button id="sendMessage">Send Message</button><br><br>
+   
+    <h3>Your Groups:</h3>
+    <ul id="groupList">
+        <!-- here all groups will show -->
+    </ul><br><br>
     
-    <button id="sendMessage">Send Message</button>
+    <div>
+        <h3>Manage Group</h3>
+        <input type="email" id="userEmail" placeholder="Enter User Email">
+        <button id="makeAdmin">Make Admin</button>
+        <button id="removeUser">Remove User</button>
+    </div><br><br>
+
+
+    <button id="invite" onclick="invite()">Invite Your Friends</button>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
+
