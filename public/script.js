@@ -198,6 +198,35 @@ async function fetchMessages(groupName = null) {
     // setInterval(() => fetchMessages(groupName), 1000);  
 }
 
+document.getElementById('uploadButton').addEventListener('click', function() {
+    const fileInput = document.getElementById('fileInput');
+    const file = fileInput.files[0];
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    fetch('/api/files/upload', {
+        method: 'POST',
+        body: formData,
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem('authToken')}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.fileUrl) {
+         console.log('File uploaded successfully:', data.fileUrl);
+          fileInput.value = '';
+        }
+        else {
+            console.error('Error uploading file:', data.message);
+        }
+    }).catch(error => {
+        console.error('Error uploading file:', error);
+    });
+});
+
+
 const socket = io('http://localhost:3000');
 // it will istens for new messages
 socket.on('newMessage', (data) => {
